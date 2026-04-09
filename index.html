@@ -19,7 +19,7 @@
     <link rel="canonical" href="https://denemon.github.io/imgtojpg/" />
     <meta property="og:locale" content="ja_JP" />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="画像変換してJPGへ | ブラウザだけで安全に圧縮・変換" />
+    <meta property="og:title" content="画像をJPGに変換しながら圧縮 | ブラウザだけで安全に変換" />
     <meta
       property="og:description"
       content="PNG・WebP・HEIC・SVG などの画像を、サーバー送信なしでブラウザ内だけで JPG に変換します。無料・登録不要。"
@@ -29,15 +29,15 @@
     <meta property="og:image" content="https://denemon.github.io/imgtojpg/assets/images/og/compressed-banner.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Browser-based JPG image converter banner" />
+    <meta property="og:image:alt" content="ブラウザ内で画像を JPG に変換するツールのバナー画像" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="画像変換してJPGへ | ブラウザだけで安全に圧縮・変換" />
+    <meta name="twitter:title" content="画像をJPGに変換しながら圧縮 | ブラウザだけで安全に変換" />
     <meta
       name="twitter:description"
       content="PNG・WebP・HEIC・SVG などの画像を、ブラウザ内だけで JPG に変換できる無料ツールです。"
     />
     <meta name="twitter:image" content="https://denemon.github.io/imgtojpg/assets/images/og/compressed-banner.png" />
-    <title>画像変換してJPGへ | ブラウザだけで安全に圧縮・変換</title>
+    <title>画像をJPGに変換しながら圧縮 | ブラウザだけで安全に変換</title>
     <link rel="stylesheet" href="./assets/css/styles.css" />
     <script src="./assets/js/app.js" defer></script>
     <script type="application/ld+json">
@@ -68,61 +68,72 @@
     </script>
   </head>
   <body>
-    <div class="page-shell">
-      <header class="hero">
-        <div class="hero-copy">
-          <p class="eyebrow">Browser JPG Converter</p>
-          <h1>画像変換してJPGへ。</h1>
+    <div class="dashboard-shell">
+      <header class="topbar">
+        <div class="topbar-copy">
+          <div class="topbar-meta-row">
+            <span class="brand-chip">imgtojpg</span>
+            <p class="eyebrow">ブラウザ内 JPG 変換</p>
+          </div>
+          <h1>画像をJPGに変換しながら圧縮</h1>
           <p class="hero-lead">
-            PNG・WebP・HEIC・SVG・TIFF・GIF・BMP・AVIF などの画像を、ブラウザ内だけで圧縮して JPG に変換します。
-            画像はサーバーへ送信されず、登録不要ですぐ使える無料の画像変換ツールです。
+            PNG・WebP・HEIC・SVG などの画像を、ブラウザ内だけで JPG に変換しながら圧縮します。1 回につき 1 ファイルだけ扱い、サーバー送信は行いません。
           </p>
-        </div>
-        <div class="hero-panel">
-          <div class="metric-card">
-            <span class="metric-label">画像変換</span>
-            <strong>1枚ずつ JPG へ</strong>
-            <p>選択した画像 1 ファイルだけを対象に、JPG へ変換します。</p>
-          </div>
-          <div class="metric-card">
-            <span class="metric-label">プライバシー</span>
-            <strong>サーバー送信なし</strong>
-            <p>画像は端末内で処理され、外部サーバーへアップロードされません。</p>
-          </div>
         </div>
       </header>
 
-      <main class="layout">
-        <section class="panel uploader-panel">
+      <main class="dashboard-grid">
+        <section class="panel control-panel">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">画像を選ぶ</p>
+              <h2>入力画像</h2>
+            </div>
+            <p class="section-note">PNG・WebP・HEIC・SVG・TIFF・GIF・BMP・AVIF に対応しています。</p>
+          </div>
+
           <div
             class="dropzone"
             id="dropzone"
+            data-state="empty"
             role="button"
             tabindex="0"
             aria-describedby="status-message"
           >
-            <div class="dropzone-glow"></div>
-            <p class="dropzone-title">画像を1枚ドラッグ&ドロップ</p>
-            <p class="dropzone-subtitle">またはボタンから選択してください</p>
-            <button class="primary-button" type="button" id="select-button">画像を選ぶ</button>
+            <div class="dropzone-grid"></div>
+            <div class="dropzone-copy">
+              <span id="dropzone-state-badge" class="dropzone-state-badge">未選択</span>
+              <p id="dropzone-title" class="dropzone-title">画像をここにドロップ</p>
+              <p id="dropzone-subtitle" class="dropzone-subtitle">またはローカルファイルを選択してください</p>
+            </div>
+            <div class="dropzone-actions">
+              <button class="primary-button" type="button" id="select-button">画像を選ぶ</button>
+              <p id="dropzone-note" class="dropzone-note">1 回につき 1 ファイルだけ変換します。</p>
+            </div>
             <input
               id="file-input"
               class="sr-only"
               type="file"
               accept=".avif,.bmp,.gif,.heic,.heif,.ico,.jfif,.jpeg,.jpg,.png,.svg,.tif,.tiff,.webp"
             />
-            <p class="dropzone-note">
-              1 回につき 1 ファイルだけ変換します。画像を選んだあと、変換開始ボタンを押して処理してください。
-            </p>
           </div>
 
-          <div class="control-grid">
+          <div class="operator-grid">
             <label class="control-card" for="quality-range">
-              <span>JPG 品質</span>
+              <span>圧縮率</span>
               <strong id="quality-value">82%</strong>
               <input id="quality-range" type="range" min="55" max="92" step="1" value="82" />
               <small>高いほど画質優先、低いほど圧縮優先です。</small>
             </label>
+
+            <div class="runbook-card">
+              <span class="runbook-label">変換のポイント</span>
+              <ul class="runbook-list">
+                <li>1 回につき 1 ファイルだけ変換します</li>
+                <li>変換前に形式と解像度を確認します</li>
+                <li>JPG に変換しながら圧縮します</li>
+              </ul>
+            </div>
           </div>
 
           <div class="status-row">
@@ -134,42 +145,41 @@
               <button class="ghost-button" type="button" id="clear-button">選択と結果をクリア</button>
             </div>
           </div>
+        </section>
 
-          <article id="selected-file-card" class="selected-file-card" data-state="empty" aria-live="polite">
-            <div class="selected-file-header">
-              <span class="selected-file-label">対象ファイル</span>
-              <span id="selected-file-badge" class="selected-file-badge">未選択</span>
+        <aside class="side-stack">
+          <section class="panel summary-panel" aria-label="変換サマリー">
+            <div class="section-heading section-heading-compact">
+              <div>
+                <p class="eyebrow">変換の状況</p>
+                <h2>変換サマリー</h2>
+              </div>
             </div>
-            <strong id="selected-file-name">まだ選択されていません</strong>
-            <p id="selected-file-meta" class="selected-file-meta">
-              ここに今回変換する 1 ファイルだけを表示します。
-            </p>
-          </article>
-        </section>
-
-        <section class="summary-grid" aria-label="変換サマリー">
-          <article class="summary-card">
-            <span>処理済み</span>
-            <strong id="processed-count">0</strong>
-          </article>
-          <article class="summary-card">
-            <span>拒否 / エラー</span>
-            <strong id="rejected-count">0</strong>
-          </article>
-          <article class="summary-card">
-            <span>削減サイズ</span>
-            <strong id="saved-size">0 B</strong>
-          </article>
-          <article class="summary-card">
-            <span>平均圧縮率</span>
-            <strong id="average-ratio">0%</strong>
-          </article>
-        </section>
+            <div class="summary-grid">
+              <article class="summary-card">
+                <span>処理済み</span>
+                <strong id="processed-count">0</strong>
+              </article>
+              <article class="summary-card">
+                <span>拒否 / エラー</span>
+                <strong id="rejected-count">0</strong>
+              </article>
+              <article class="summary-card">
+                <span>削減サイズ</span>
+                <strong id="saved-size">0 B</strong>
+              </article>
+              <article class="summary-card">
+                <span>平均圧縮率</span>
+                <strong id="average-ratio">0%</strong>
+              </article>
+            </div>
+          </section>
+        </aside>
 
         <section class="panel results-panel">
           <div class="section-heading">
             <div>
-              <p class="eyebrow">Conversion Result</p>
+              <p class="eyebrow">変換後の画像</p>
               <h2>変換結果</h2>
             </div>
             <p class="section-note">入力画像は一切送信せず、その場で JPG を生成します。</p>
@@ -180,15 +190,16 @@
             </div>
           </div>
         </section>
-
-        <footer class="site-notes" aria-label="利用上の注意">
-          <ul class="site-notes-list">
-            <li>画像を JPG へ変換するための無料の Web アプリです。</li>
-            <li>変換処理にはブラウザの組み込み機能を利用しており、画像データがサーバーへ送信されることはありません。</li>
-            <li>本アプリは現状有姿で提供されるものであり、利用または利用不能によって生じたいかなる損害についても、開発者は一切の責任を負いません。</li>
-          </ul>
-        </footer>
       </main>
+
+      <footer class="site-notes" aria-label="利用上の注意">
+        <ul class="site-notes-list">
+          <li>無料で使えるブラウザ内完結の JPG 変換ツールです。</li>
+          <li>画像データは端末内で処理され、外部サーバーへアップロードされません。</li>
+          <li>変換結果や品質は入力画像の形式や内容によって変わります。</li>
+          <li>利用または利用不能によって生じたいかなる損害についても一切の責任を負いません。</li>
+        </ul>
+      </footer>
     </div>
 
     <noscript>

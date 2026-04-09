@@ -68,6 +68,10 @@ const state = {
 
 const elements = {
   dropzone: document.querySelector("#dropzone"),
+  dropzoneStateBadge: document.querySelector("#dropzone-state-badge"),
+  dropzoneTitle: document.querySelector("#dropzone-title"),
+  dropzoneSubtitle: document.querySelector("#dropzone-subtitle"),
+  dropzoneNote: document.querySelector("#dropzone-note"),
   fileInput: document.querySelector("#file-input"),
   selectButton: document.querySelector("#select-button"),
   convertButton: document.querySelector("#convert-button"),
@@ -75,10 +79,6 @@ const elements = {
   qualityRange: document.querySelector("#quality-range"),
   qualityValue: document.querySelector("#quality-value"),
   statusMessage: document.querySelector("#status-message"),
-  selectedFileCard: document.querySelector("#selected-file-card"),
-  selectedFileBadge: document.querySelector("#selected-file-badge"),
-  selectedFileName: document.querySelector("#selected-file-name"),
-  selectedFileMeta: document.querySelector("#selected-file-meta"),
   resultsList: document.querySelector("#results-list"),
   emptyState: document.querySelector("#empty-state"),
   processedCount: document.querySelector("#processed-count"),
@@ -338,36 +338,40 @@ function setPendingFiles(files) {
 }
 
 /**
- * 現在の待機状態に合わせて、開始ボタンと対象ファイル表示を更新する。
+ * 現在の待機状態に合わせて、開始ボタンとドロップエリア表示を更新する。
  */
 function updatePendingSelection() {
   const hasPendingFile = state.pendingFiles.length === 1;
+  elements.selectButton.textContent = hasPendingFile ? "別の画像を選ぶ" : "画像を選ぶ";
   elements.convertButton.textContent = hasPendingFile ? "この画像を変換" : "変換を開始";
   elements.convertButton.disabled = state.isProcessing || !browserSupportsSecurePipeline() || !hasPendingFile;
-  updateSelectedFileSummary();
+  updateDropzoneSelection();
 }
 
 /**
- * 現在選択されている対象ファイルを、専用カードへ分かりやすく表示する。
+ * ドロップエリア自体にも選択中のファイル名を反映し、
+ * いま何が変換対象なのかをその場で分かるようにする。
  */
-function updateSelectedFileSummary() {
+function updateDropzoneSelection() {
   const selectedFile = state.pendingFiles[0];
 
   if (!selectedFile) {
-    elements.selectedFileCard.dataset.state = "empty";
-    elements.selectedFileBadge.textContent = "未選択";
-    elements.selectedFileName.textContent = "まだ選択されていません";
-    elements.selectedFileMeta.textContent = "ここに今回変換する 1 ファイルだけを表示します。";
+    elements.dropzone.dataset.state = "empty";
+    elements.dropzoneStateBadge.textContent = "未選択";
+    elements.dropzoneTitle.textContent = "画像をここにドロップ";
+    elements.dropzoneSubtitle.textContent = "またはローカルファイルを選択してください";
+    elements.dropzoneNote.textContent = "1 回につき 1 ファイルだけ変換します。";
     return;
   }
 
   const extension = getExtension(selectedFile.name);
-  const extensionLabel = extension ? `${extension.toUpperCase()} ・ ` : "";
+  const extensionLabel = extension ? extension.toUpperCase() : "IMAGE";
 
-  elements.selectedFileCard.dataset.state = "selected";
-  elements.selectedFileBadge.textContent = "選択中";
-  elements.selectedFileName.textContent = selectedFile.name;
-  elements.selectedFileMeta.textContent = `${extensionLabel}${formatBytes(selectedFile.size)} ・ この 1 ファイルだけが変換対象です。`;
+  elements.dropzone.dataset.state = "selected";
+  elements.dropzoneStateBadge.textContent = "選択済み";
+  elements.dropzoneTitle.textContent = selectedFile.name;
+  elements.dropzoneSubtitle.textContent = `${extensionLabel} ・ ${formatBytes(selectedFile.size)} ・ この画像が変換対象です。`;
+  elements.dropzoneNote.textContent = "内容を確認したら「この画像を変換」を押してください。";
 }
 
 /**
