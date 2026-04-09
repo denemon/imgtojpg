@@ -270,6 +270,7 @@ async function processIncomingFiles(files) {
   const settings = getProcessingSettings();
   let processedThisRun = 0;
   let rejectedThisRun = 0;
+  clearResults();
   setBusy(true);
 
   try {
