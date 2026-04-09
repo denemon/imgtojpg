@@ -80,9 +80,11 @@ If these features are not available, the app disables conversion for safety.
 ## Project Structure
 
 - `index.html`: page markup
-- `styles.css`: visual styling
-- `app.js`: UI logic, validation, and conversion flow
-- `image-worker.js`: worker-side image conversion
+- `assets/css/styles.css`: visual styling
+- `assets/js/app.js`: UI logic, validation, and conversion flow
+- `assets/js/image-worker.js`: worker-side image conversion
+- `assets/images/og/compressed-banner.png`: social sharing image
+- `assets/images/icons/compression-concept.png`: favicon source image
 
 ## Deployment
 

@@ -8,33 +8,86 @@
     />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="referrer" content="no-referrer" />
-    <meta name="description" content="ブラウザだけで画像を圧縮し、JPGに変換するセキュアな静的アプリです。" />
+    <meta
+      name="description"
+      content="PNG・WebP・HEIC・SVG などの画像を、サーバー送信なしでブラウザ内だけで JPG に変換します。無料・登録不要の画像変換ツールです。"
+    />
+    <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" />
     <meta name="theme-color" content="#0e1a2b" />
-    <title>PrismPress | Browser Image Compressor</title>
-    <link rel="stylesheet" href="./styles.css" />
-    <script src="./app.js" defer></script>
+    <link rel="icon" type="image/png" sizes="512x512" href="./assets/images/icons/compression-concept.png" />
+    <link rel="apple-touch-icon" href="./assets/images/icons/compression-concept.png" />
+    <link rel="canonical" href="https://denemon.github.io/imgtojpg/" />
+    <meta property="og:locale" content="ja_JP" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="画像変換してJPGへ | ブラウザだけで安全に圧縮・変換" />
+    <meta
+      property="og:description"
+      content="PNG・WebP・HEIC・SVG などの画像を、サーバー送信なしでブラウザ内だけで JPG に変換します。無料・登録不要。"
+    />
+    <meta property="og:url" content="https://denemon.github.io/imgtojpg/" />
+    <meta property="og:site_name" content="imgtojpg" />
+    <meta property="og:image" content="https://denemon.github.io/imgtojpg/assets/images/og/compressed-banner.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Browser-based JPG image converter banner" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="画像変換してJPGへ | ブラウザだけで安全に圧縮・変換" />
+    <meta
+      name="twitter:description"
+      content="PNG・WebP・HEIC・SVG などの画像を、ブラウザ内だけで JPG に変換できる無料ツールです。"
+    />
+    <meta name="twitter:image" content="https://denemon.github.io/imgtojpg/assets/images/og/compressed-banner.png" />
+    <title>画像変換してJPGへ | ブラウザだけで安全に圧縮・変換</title>
+    <link rel="stylesheet" href="./assets/css/styles.css" />
+    <script src="./assets/js/app.js" defer></script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "imgtojpg",
+        "url": "https://denemon.github.io/imgtojpg/",
+        "description": "PNG・WebP・HEIC・SVG などの画像を、サーバー送信なしでブラウザ内だけで JPG に変換する無料の画像変換ツールです。",
+        "applicationCategory": "MultimediaApplication",
+        "operatingSystem": "Any",
+        "browserRequirements": "JavaScript, Web Worker, createImageBitmap, OffscreenCanvas",
+        "inLanguage": "ja",
+        "isAccessibleForFree": true,
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "JPY"
+        },
+        "featureList": [
+          "ブラウザだけで画像変換",
+          "JPG への変換",
+          "PNG・WebP・HEIC・SVG などに対応",
+          "画像のサーバー送信なし",
+          "1ファイルずつ安全に変換"
+        ]
+      }
+    </script>
   </head>
   <body>
     <div class="page-shell">
       <header class="hero">
         <div class="hero-copy">
-          <p class="eyebrow">100% Browser-side image pipeline</p>
-          <h1>画像を圧縮してJPGへ。</h1>
+          <p class="eyebrow">Browser JPG Converter</p>
+          <h1>画像変換してJPGへ。</h1>
           <p class="hero-lead">
-            画像ファイルだけを受け付け、ブラウザ内で圧縮してから JPG に変換します。サーバー送信なし、GitHub Pages
-            でそのまま公開できる静的サイトです。
+            PNG・WebP・HEIC・SVG・TIFF・GIF・BMP・AVIF などの画像を、ブラウザ内だけで圧縮して JPG に変換します。
+            画像はサーバーへ送信されず、登録不要ですぐ使える無料の画像変換ツールです。
           </p>
         </div>
         <div class="hero-panel">
           <div class="metric-card">
-            <span class="metric-label">セキュリティ方針</span>
-            <strong>ブラウザ内で処理</strong>
-            <p>画像はこのブラウザ内だけで処理され、外部サーバーには送信されません。</p>
+            <span class="metric-label">画像変換</span>
+            <strong>1枚ずつ JPG へ</strong>
+            <p>選択した画像 1 ファイルだけを対象に、JPG へ変換します。</p>
           </div>
           <div class="metric-card">
-            <span class="metric-label">変換フロー</span>
-            <strong>圧縮 → JPG</strong>
-            <p>元の解像度を保ったまま画質調整を行い、JPG を生成します。</p>
+            <span class="metric-label">プライバシー</span>
+            <strong>サーバー送信なし</strong>
+            <p>画像は端末内で処理され、外部サーバーへアップロードされません。</p>
           </div>
         </div>
       </header>
@@ -59,7 +112,7 @@
               accept=".avif,.bmp,.gif,.heic,.heif,.ico,.jfif,.jpeg,.jpg,.png,.svg,.tif,.tiff,.webp"
             />
             <p class="dropzone-note">
-              このアプリは 1 回につき 1 ファイルだけ変換します。画像を選んだあと、変換開始ボタンを押して処理してください。
+              1 回につき 1 ファイルだけ変換します。画像を選んだあと、変換開始ボタンを押して処理してください。
             </p>
           </div>
 
@@ -116,7 +169,7 @@
         <section class="panel results-panel">
           <div class="section-heading">
             <div>
-              <p class="eyebrow">Conversion Queue</p>
+              <p class="eyebrow">Conversion Result</p>
               <h2>変換結果</h2>
             </div>
             <p class="section-note">入力画像は一切送信せず、その場で JPG を生成します。</p>
@@ -130,7 +183,7 @@
 
         <footer class="site-notes" aria-label="利用上の注意">
           <ul class="site-notes-list">
-            <li>このアプリは、画像形式のファイルを JPEG 形式へ変換するための無料の Web アプリです。</li>
+            <li>画像を JPG へ変換するための無料の Web アプリです。</li>
             <li>変換処理にはブラウザの組み込み機能を利用しており、画像データがサーバーへ送信されることはありません。</li>
             <li>本アプリは現状有姿で提供されるものであり、利用または利用不能によって生じたいかなる損害についても、開発者は一切の責任を負いません。</li>
           </ul>

@@ -680,7 +680,7 @@ function ensureWorker() {
     return;
   }
 
-  state.worker = new Worker("./image-worker.js");
+  state.worker = new Worker("./assets/js/image-worker.js");
   state.worker.addEventListener("message", handleWorkerMessage);
   state.worker.addEventListener("error", handleWorkerError);
 }
