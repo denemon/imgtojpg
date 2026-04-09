@@ -49,7 +49,7 @@
             aria-describedby="status-message"
           >
             <div class="dropzone-glow"></div>
-            <p class="dropzone-title">画像をドラッグ&ドロップ</p>
+            <p class="dropzone-title">画像を1枚ドラッグ&ドロップ</p>
             <p class="dropzone-subtitle">またはボタンから選択してください</p>
             <button class="primary-button" type="button" id="select-button">画像を選ぶ</button>
             <input
@@ -57,10 +57,9 @@
               class="sr-only"
               type="file"
               accept=".avif,.bmp,.gif,.heic,.heif,.ico,.jfif,.jpeg,.jpg,.png,.svg,.tif,.tiff,.webp"
-              multiple
             />
             <p class="dropzone-note">
-              画像を選んだあと、変換開始ボタンを押すと処理します。1ファイル 10MB まで、同時に 8 件かつ合計 40MB まで対応します。
+              このアプリは 1 回につき 1 ファイルだけ変換します。画像を選んだあと、変換開始ボタンを押して処理してください。
             </p>
           </div>
 
@@ -75,13 +74,24 @@
 
           <div class="status-row">
             <p id="status-message" class="status-message" aria-live="polite">
-              画像を選択してから変換を開始してください。処理はこのブラウザ内で完結します。
+              画像を 1 枚選択してから変換を開始してください。処理はこのブラウザ内で完結します。
             </p>
             <div class="status-actions">
               <button class="primary-button" type="button" id="convert-button" disabled>変換を開始</button>
               <button class="ghost-button" type="button" id="clear-button">選択と結果をクリア</button>
             </div>
           </div>
+
+          <article id="selected-file-card" class="selected-file-card" data-state="empty" aria-live="polite">
+            <div class="selected-file-header">
+              <span class="selected-file-label">対象ファイル</span>
+              <span id="selected-file-badge" class="selected-file-badge">未選択</span>
+            </div>
+            <strong id="selected-file-name">まだ選択されていません</strong>
+            <p id="selected-file-meta" class="selected-file-meta">
+              ここに今回変換する 1 ファイルだけを表示します。
+            </p>
+          </article>
         </section>
 
         <section class="summary-grid" aria-label="変換サマリー">
@@ -113,7 +123,7 @@
           </div>
           <div id="results-list" class="results-list" aria-live="polite">
             <div id="empty-state" class="empty-state">
-              まだ結果はありません。画像を追加すると、ここに変換済みの JPG が並びます。
+              まだ結果はありません。1 枚の画像を変換すると、ここに変換済みの JPG が表示されます。
             </div>
           </div>
         </section>

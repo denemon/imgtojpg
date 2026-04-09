@@ -6,8 +6,7 @@
  * 安全と判断したデータだけを Worker に渡して JPG を生成する。
  */
 const MAX_FILE_BYTES = 10 * 1024 * 1024;
-const MAX_BATCH_BYTES = 40 * 1024 * 1024;
-const MAX_FILES = 8;
+const MAX_FILES = 1;
 const MAX_HEADER_BYTES = 1024 * 1024;
 const MAX_IMAGE_WIDTH = 8192;
 const MAX_IMAGE_HEIGHT = 8192;
@@ -76,6 +75,10 @@ const elements = {
   qualityRange: document.querySelector("#quality-range"),
   qualityValue: document.querySelector("#quality-value"),
   statusMessage: document.querySelector("#status-message"),
+  selectedFileCard: document.querySelector("#selected-file-card"),
+  selectedFileBadge: document.querySelector("#selected-file-badge"),
+  selectedFileName: document.querySelector("#selected-file-name"),
+  selectedFileMeta: document.querySelector("#selected-file-meta"),
   resultsList: document.querySelector("#results-list"),
   emptyState: document.querySelector("#empty-state"),
   processedCount: document.querySelector("#processed-count"),
@@ -199,7 +202,7 @@ function bindEvents() {
 
 /**
  * 選択されたファイルを待機キューへ入れ、開始ボタンで実行できる状態にする。
- * この段階ではまだ変換せず、件数や合計サイズの上限だけ先に確認する。
+ * この段階ではまだ変換せず、単一ファイルの対象だけを決めて UI へ反映する。
  *
  * @param {File[]} files ブラウザから渡された入力ファイル一覧
  * @returns {Promise<void>}
@@ -222,25 +225,22 @@ async function stageIncomingFiles(files) {
 
   const selection = limitBatch(files);
   if (!selection.files.length) {
-    setStatus(`同時処理は ${MAX_FILES} 件かつ合計 ${formatBytes(MAX_BATCH_BYTES)} までです。`, "warn");
+    setStatus("画像を 1 枚選択してください。", "warn");
     return;
   }
 
   const hadPendingFiles = state.pendingFiles.length > 0;
   const notices = [];
+  const selectedFile = selection.files[0];
 
   if (selection.limitedByCount) {
-    notices.push(`先頭 ${MAX_FILES} 件のみ待機キューへ入れました。`);
-  }
-
-  if (selection.skippedForSize > 0) {
-    notices.push(`合計 ${formatBytes(MAX_BATCH_BYTES)} を超える ${selection.skippedForSize} 件は除外しました。`);
+    notices.push("複数ファイルが渡されたため、最初の 1 件だけを対象にしました。");
   }
 
   setPendingFiles(selection.files);
 
   const prefix = hadPendingFiles ? "前の選択を置き換えて、" : "";
-  const baseMessage = `${prefix}${selection.files.length} 件の画像を選択しました。変換を開始してください。`;
+  const baseMessage = `${prefix}「${selectedFile.name}」を対象ファイルとして選択しました。変換を開始してください。`;
   setStatus(notices.length ? `${baseMessage} ${notices.join(" ")}` : baseMessage, notices.length ? "warn" : "info");
 }
 
@@ -315,31 +315,15 @@ async function processIncomingFiles(files) {
 }
 
 /**
- * 同時処理数と合計サイズの上限に合わせて、今回処理するファイルを選別する。
+ * 受け取った一覧から、今回の対象にする 1 ファイルだけを選び出す。
  *
  * @param {File[]} files ユーザーが渡した入力ファイル一覧
- * @returns {{files: File[], limitedByCount: boolean, skippedForSize: number}}
+ * @returns {{files: File[], limitedByCount: boolean}}
  */
 function limitBatch(files) {
-  const limitedByCount = files.slice(0, MAX_FILES);
-  const accepted = [];
-  const wasLimitedByCount = files.length > MAX_FILES;
-  let skippedForSize = 0;
-  let totalBytes = 0;
-
-  for (const file of limitedByCount) {
-    if (totalBytes + file.size > MAX_BATCH_BYTES) {
-      skippedForSize += 1;
-      continue;
-    }
-    accepted.push(file);
-    totalBytes += file.size;
-  }
-
   return {
-    files: accepted,
-    limitedByCount: wasLimitedByCount,
-    skippedForSize
+    files: files.length ? [files[0]] : [],
+    limitedByCount: files.length > MAX_FILES
   };
 }
 
@@ -349,17 +333,41 @@ function limitBatch(files) {
  * @param {File[]} files 次に変換するファイル一覧
  */
 function setPendingFiles(files) {
-  state.pendingFiles = files.slice();
+  state.pendingFiles = files.slice(0, MAX_FILES);
   updatePendingSelection();
 }
 
 /**
- * 現在の待機件数に合わせて、開始ボタンの文言と有効状態を更新する。
+ * 現在の待機状態に合わせて、開始ボタンと対象ファイル表示を更新する。
  */
 function updatePendingSelection() {
-  const count = state.pendingFiles.length;
-  elements.convertButton.textContent = count > 0 ? `変換を開始 (${count}件)` : "変換を開始";
-  elements.convertButton.disabled = state.isProcessing || !browserSupportsSecurePipeline() || count === 0;
+  const hasPendingFile = state.pendingFiles.length === 1;
+  elements.convertButton.textContent = hasPendingFile ? "この画像を変換" : "変換を開始";
+  elements.convertButton.disabled = state.isProcessing || !browserSupportsSecurePipeline() || !hasPendingFile;
+  updateSelectedFileSummary();
+}
+
+/**
+ * 現在選択されている対象ファイルを、専用カードへ分かりやすく表示する。
+ */
+function updateSelectedFileSummary() {
+  const selectedFile = state.pendingFiles[0];
+
+  if (!selectedFile) {
+    elements.selectedFileCard.dataset.state = "empty";
+    elements.selectedFileBadge.textContent = "未選択";
+    elements.selectedFileName.textContent = "まだ選択されていません";
+    elements.selectedFileMeta.textContent = "ここに今回変換する 1 ファイルだけを表示します。";
+    return;
+  }
+
+  const extension = getExtension(selectedFile.name);
+  const extensionLabel = extension ? `${extension.toUpperCase()} ・ ` : "";
+
+  elements.selectedFileCard.dataset.state = "selected";
+  elements.selectedFileBadge.textContent = "選択中";
+  elements.selectedFileName.textContent = selectedFile.name;
+  elements.selectedFileMeta.textContent = `${extensionLabel}${formatBytes(selectedFile.size)} ・ この 1 ファイルだけが変換対象です。`;
 }
 
 /**

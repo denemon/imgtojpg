@@ -309,6 +309,61 @@ h1 {
   border-radius: var(--radius-lg);
 }
 
+.selected-file-card {
+  display: grid;
+  gap: 10px;
+  padding: 18px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--panel-border);
+  background: linear-gradient(180deg, rgba(18, 32, 50, 0.84), rgba(9, 17, 28, 0.78));
+  box-shadow: var(--shadow);
+}
+
+.selected-file-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.selected-file-label {
+  color: var(--accent-strong);
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.selected-file-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 72px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 0.76rem;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.selected-file-card strong {
+  font-size: 1.05rem;
+  letter-spacing: -0.02em;
+  word-break: break-word;
+}
+
+.selected-file-meta {
+  margin: 0;
+  color: var(--muted);
+}
+
+.selected-file-card[data-state="selected"] .selected-file-badge {
+  color: #041018;
+  background: linear-gradient(135deg, var(--accent-strong), var(--accent));
+  border-color: transparent;
+}
+
 .control-card span {
   color: var(--accent-strong);
   font-size: 0.82rem;
