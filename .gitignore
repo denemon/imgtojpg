@@ -1,0 +1,14 @@
+# Exclude all dotfiles
+.*
+
+# Track .gitignore itself
+!.gitignore
+
+# Chrome-generated extension metadata
+_metadata/
+
+# Node test/development dependencies
+node_modules/
+
+# Claude Code session logs
+.claude/log/

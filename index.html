@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' blob: data:; connect-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'; worker-src 'self' blob:;"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="description" content="ブラウザだけで画像を圧縮し、JPGに変換するセキュアな静的アプリです。" />
+    <meta name="theme-color" content="#0e1a2b" />
+    <title>PrismPress | Browser Image Compressor</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="./app.js" defer></script>
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">100% Browser-side image pipeline</p>
+          <h1>画像を圧縮してJPGへ。</h1>
+          <p class="hero-lead">
+            画像ファイルだけを受け付け、ブラウザ内で圧縮してから JPG に変換します。サーバー送信なし、GitHub Pages
+            でそのまま公開できる静的サイトです。
+          </p>
+        </div>
+        <div class="hero-panel">
+          <div class="metric-card">
+            <span class="metric-label">セキュリティ方針</span>
+            <strong>ブラウザ内で処理</strong>
+            <p>画像はこのブラウザ内だけで処理され、外部サーバーには送信されません。</p>
+          </div>
+          <div class="metric-card">
+            <span class="metric-label">変換フロー</span>
+            <strong>圧縮 → JPG</strong>
+            <p>元の解像度を保ったまま画質調整を行い、JPG を生成します。</p>
+          </div>
+        </div>
+      </header>
+
+      <main class="layout">
+        <section class="panel uploader-panel">
+          <div
+            class="dropzone"
+            id="dropzone"
+            role="button"
+            tabindex="0"
+            aria-describedby="status-message"
+          >
+            <div class="dropzone-glow"></div>
+            <p class="dropzone-title">画像をドラッグ&ドロップ</p>
+            <p class="dropzone-subtitle">またはボタンから選択してください</p>
+            <button class="primary-button" type="button" id="select-button">画像を選ぶ</button>
+            <input
+              id="file-input"
+              class="sr-only"
+              type="file"
+              accept=".avif,.bmp,.gif,.heic,.heif,.ico,.jfif,.jpeg,.jpg,.png,.svg,.tif,.tiff,.webp"
+              multiple
+            />
+            <p class="dropzone-note">
+              画像を選んだあと、変換開始ボタンを押すと処理します。1ファイル 10MB まで、同時に 8 件かつ合計 40MB まで対応します。
+            </p>
+          </div>
+
+          <div class="control-grid">
+            <label class="control-card" for="quality-range">
+              <span>JPG 品質</span>
+              <strong id="quality-value">82%</strong>
+              <input id="quality-range" type="range" min="55" max="92" step="1" value="82" />
+              <small>高いほど画質優先、低いほど圧縮優先です。</small>
+            </label>
+          </div>
+
+          <div class="status-row">
+            <p id="status-message" class="status-message" aria-live="polite">
+              画像を選択してから変換を開始してください。処理はこのブラウザ内で完結します。
+            </p>
+            <div class="status-actions">
+              <button class="primary-button" type="button" id="convert-button" disabled>変換を開始</button>
+              <button class="ghost-button" type="button" id="clear-button">選択と結果をクリア</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="summary-grid" aria-label="変換サマリー">
+          <article class="summary-card">
+            <span>処理済み</span>
+            <strong id="processed-count">0</strong>
+          </article>
+          <article class="summary-card">
+            <span>拒否 / エラー</span>
+            <strong id="rejected-count">0</strong>
+          </article>
+          <article class="summary-card">
+            <span>削減サイズ</span>
+            <strong id="saved-size">0 B</strong>
+          </article>
+          <article class="summary-card">
+            <span>平均圧縮率</span>
+            <strong id="average-ratio">0%</strong>
+          </article>
+        </section>
+
+        <section class="panel results-panel">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Conversion Queue</p>
+              <h2>変換結果</h2>
+            </div>
+            <p class="section-note">入力画像は一切送信せず、その場で JPG を生成します。</p>
+          </div>
+          <div id="results-list" class="results-list" aria-live="polite">
+            <div id="empty-state" class="empty-state">
+              まだ結果はありません。画像を追加すると、ここに変換済みの JPG が並びます。
+            </div>
+          </div>
+        </section>
+
+        <footer class="site-notes" aria-label="利用上の注意">
+          <ul class="site-notes-list">
+            <li>このアプリは、画像形式のファイルを JPEG 形式へ変換するための無料の Web アプリです。</li>
+            <li>変換処理にはブラウザの組み込み機能を利用しており、画像データがサーバーへ送信されることはありません。</li>
+            <li>本アプリは現状有姿で提供されるものであり、利用または利用不能によって生じたいかなる損害についても、開発者は一切の責任を負いません。</li>
+          </ul>
+        </footer>
+      </main>
+    </div>
+
+    <noscript>
+      <div class="noscript-banner">このサイトは JavaScript を使ってブラウザ内で画像を処理します。</div>
+    </noscript>
+  </body>
+</html>
